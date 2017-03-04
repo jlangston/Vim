@@ -68,6 +68,11 @@
                 "when": "editorTextFocus && vim.use<D-right> &&  !inDebugRepl && vim.mode != 'Insert'"
             },
             {
+                "key": "cmd+ctrl+g",
+                "command": "extension.vim_cmd+ctrl+g",
+                "when": "editorTextFocus && !inDebugRepl"
+            },
+            {
                 "key": "cmd+d",
                 "command": "extension.vim_cmd+d",
                 "when": "editorTextFocus && vim.use<D-d> && !inDebugRepl"

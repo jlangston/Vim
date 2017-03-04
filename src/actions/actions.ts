@@ -6267,6 +6267,32 @@ class ActionOverrideCmdD extends BaseCommand {
 }
 
 @RegisterAction
+class ActionOverrideCtrlCmdG extends BaseCommand {
+  modes = [ModeName.Normal, ModeName.Visual];
+  keys = [
+    ["<C-D+g>"],
+    ["g", "a"]
+  ];
+  runsOnceForEveryCursor() { return false; }
+  runsOnceForEachCountPrefix = true;
+
+  public async exec(position: Position, vimState: VimState): Promise<VimState> {
+    await vscode.commands.executeCommand('editor.action.changeAll');
+    vimState.allCursors = await allowVSCodeToPropagateCursorUpdatesAndReturnThem();
+
+    // If this is the first cursor, select 1 character less
+    // so that only the word is selected, no extra character
+    if (vimState.allCursors.length === 1) {
+      vimState.allCursors[0] = vimState.allCursors[0].withNewStop(vimState.allCursors[0].stop.getLeft());
+    }
+
+    vimState.currentMode = ModeName.Visual;
+
+    return vimState;
+  }
+}
+
+@RegisterAction
 class ActionOverrideCmdAltDown extends BaseCommand {
   modes = [ModeName.Normal, ModeName.Visual];
   keys = [
